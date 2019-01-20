@@ -121,52 +121,52 @@ class DQN():
 
 def main():
     # initialize OpenAI Gym env and DQN agent
-env = gym.make('CartPole-v0')
-agent = DQN(env)
+    env = gym.make('CartPole-v0')
+    agent = DQN(env)
 
-# 记录得分
-score = np.zeros((100, 2))
-k = 0
+    # 记录得分
+    score = np.zeros((100, 2))
+    k = 0
 
-for episode in range(EPISODE):
-    ## initialize task
-    state = env.reset()
-    ## Train
-    for step in range(STEP):
-        action = agent.egreedy_action(state.reshape(-1, agent.state_dim))    ##e-greedy action for train
-        next_state, reward, done, _ = env.step(action)
-        ## define reward for agent
-        agent.store_transition(state, action, reward, next_state, done)
-        state = next_state
-        if done:
-            break
-
-    # Test every 20 episodes
-    if episode % 20 == 0:
-        score[k, 0] = episode 
-
-        total_reward = 0
-        for i in range(TEST):
-            state = env.reset()
-            for j in range(STEP):
-                env.render()
-                action = agent.action(state)    ## direct action for test
-                state, reward, done, _ = env.step(action)
-                total_reward += reward
-                if done:
-                    break
-            ave_reward = total_reward / (i+1)
-            score[k, 1] = ave_reward
-            print('episode:{}, Evaluation Ave Reward:{}'.format(episode, ave_reward))
-            if ave_reward >= 200:
+    for episode in range(EPISODE):
+        ## initialize task
+        state = env.reset()
+        ## Train
+        for step in range(STEP):
+            action = agent.egreedy_action(state.reshape(-1, agent.state_dim))    ##e-greedy action for train
+            next_state, reward, done, _ = env.step(action)
+            ## define reward for agent
+            agent.store_transition(state, action, reward, next_state, done)
+            state = next_state
+            if done:
                 break
 
-        k += 1
+        # Test every 20 episodes
+        if episode % 20 == 0:
+            score[k, 0] = episode 
 
-plt.plot(score[:, 0], score[:, 1])
-plt.xlabel('Episode')
-plt.ylabel('Reward')
-plt.show()
+            total_reward = 0
+            for i in range(TEST):
+                state = env.reset()
+                for j in range(STEP):
+                    env.render()
+                    action = agent.action(state)    ## direct action for test
+                    state, reward, done, _ = env.step(action)
+                    total_reward += reward
+                    if done:
+                        break
+                ave_reward = total_reward / (i+1)
+                score[k, 1] = ave_reward
+                print('episode:{}, Evaluation Ave Reward:{}'.format(episode, ave_reward))
+                if ave_reward >= 200:
+                    break
+
+            k += 1
+
+    plt.plot(score[:, 0], score[:, 1])
+    plt.xlabel('Episode')
+    plt.ylabel('Reward')
+    plt.show()
 
 if __name__ == '__main__':
     main()
