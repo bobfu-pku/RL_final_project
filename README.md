@@ -3,4 +3,5 @@
 
 实现过程如三个文件所示
 
-<img src="/demo.gif" width="40" />
+一下为我们实现DQN算法实验过程示意图
+<center><img src="/demo.gif" width="400" />
